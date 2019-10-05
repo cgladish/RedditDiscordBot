@@ -1,0 +1,29 @@
+{
+  "name": "lewds-bot",
+  "version": "0.0.1",
+  "description": "My own Discord bot",
+  "main": "main.js",
+  "author": "Chase Gladish",
+  "watch": {
+    "start-nowatch": "src/**/*.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "babel -d lib/ src",
+    "start-nowatch": "npm run-script build && node lib/main.js",
+    "start": "npm-watch start-nowatch"
+  },
+  "dependencies": {
+    "discord.js": "^11.5.1",
+    "snoowrap": "^1.19.0",
+    "winston": "^3.2.1"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.6.2",
+    "@babel/core": "^7.6.2",
+    "@babel/plugin-proposal-object-rest-spread": "^7.6.2",
+    "@babel/polyfill": "^7.6.0",
+    "@babel/preset-env": "^7.6.2",
+    "npm-watch": "^0.6.0"
+  }
+}
