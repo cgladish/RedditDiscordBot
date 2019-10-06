@@ -45,15 +45,18 @@ export const getImageUrlFromPost = post => {
 
 export const createEmbed = post => {
   const imageUrl = getImageUrlFromPost(post);
-  return new Discord.RichEmbed()
-    .setColor("#FFB6C1")
-    .setAuthor(
-      `/u/${post.author.name}`,
-      "https://images-eu.ssl-images-amazon.com/images/I/418PuxYS63L.png"
-    )
-    .setTitle(`Here's a top post from ${post.subreddit.display_name}`)
-    .setURL(`http://reddit.com${post.permalink}`)
-    .setImage(getImageUrlFromPost(post))
-    .setFooter("https://github.com/cgladish/OwOBot")
-    .setTimestamp();
+  return (
+    imageUrl &&
+    new Discord.RichEmbed()
+      .setColor("#FFB6C1")
+      .setAuthor(
+        `/u/${post.author.name}`,
+        "https://images-eu.ssl-images-amazon.com/images/I/418PuxYS63L.png"
+      )
+      .setTitle(`Here's a top post from ${post.subreddit.display_name}`)
+      .setURL(`http://reddit.com${post.permalink}`)
+      .setImage(getImageUrlFromPost(post))
+      .setFooter("https://github.com/cgladish/OwOBot")
+      .setTimestamp()
+  );
 };

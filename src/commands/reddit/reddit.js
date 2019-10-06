@@ -17,7 +17,7 @@ export const reddit = (() => {
       }
 
       const subreddit = args[0];
-      while (true) {
+      for (let i = 0; i < PAGE_SIZE; ++i) {
         const index = indicesBySubreddit[subreddit] || 0;
         indicesBySubreddit[subreddit] = (index + 1) % PAGE_SIZE;
 
@@ -39,9 +39,11 @@ export const reddit = (() => {
         const embed = createEmbed(posts[index]);
         if (embed) {
           await channel.send(embed);
-          break;
+          return;
         }
       }
+
+      channel.send("I searched a page of posts and didn't find any images :/");
     } catch (err) {
       logger.error(err.toString());
       channel.send("Failed to retrieve post from the subreddit.");
