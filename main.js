@@ -15,5 +15,5 @@ if (process.env.NODE_ENV === "prod") {
       res.write("App is running");
       res.end();
     })
-    .listen(8080);
+    .listen(process.env.PORT);
 }
