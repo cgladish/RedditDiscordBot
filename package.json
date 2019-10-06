@@ -11,8 +11,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "clean": "rmdir /S /Q lib",
     "build": "babel -d lib/ src",
-    "start": "npm run-script build && node main.js",
-    "start:dev": "npm-watch start"
+    "start": "node main.js",
+    "start:dev": "npm run-script build && npm-watch start"
   },
   "dependencies": {
     "discord.js": "^11.5.1",
