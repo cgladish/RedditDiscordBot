@@ -16,4 +16,9 @@ if (process.env.NODE_ENV === "prod") {
       res.end();
     })
     .listen(process.env.PORT);
+  // Ping self to keep dyno awake
+  const THIRTY_MINUTES = 1800000;
+  setInterval(function() {
+    http.get(`http://${process.env.HEROKU_APP_NAME}.herokuapp.com/`);
+  }, THIRTY_MINUTES);
 }
