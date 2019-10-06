@@ -11,11 +11,12 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "clean": "rmdir /S /Q lib",
     "build": "babel -d lib/ src",
-    "start-nowatch": "npm run-script build && node lib/main.js",
+    "start-nowatch": "npm run-script build && node main.js",
     "start": "npm-watch start-nowatch"
   },
   "dependencies": {
     "discord.js": "^11.5.1",
+    "dotenv": "^8.1.0",
     "snoowrap": "^1.19.0",
     "winston": "^3.2.1"
   },

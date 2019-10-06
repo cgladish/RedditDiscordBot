@@ -1,12 +1,18 @@
 import snoowrap from "snoowrap";
 import logger from "winston";
 
-import auth from "../../../auth.json";
 import bot from "../../bot";
 import { PAGE_SIZE, createEmbed } from "./reddit.helpers";
 
+const snooWrap = new snoowrap({
+  userAgent: "owo-bot",
+  clientId: process.env.REDDIT_CLIENT_ID,
+  clientSecret: process.env.REDDIT_CLIENT_SECRET,
+  username: process.env.REDDIT_USERNAME,
+  password: process.env.REDDIT_PASSWORD
+});
+
 export const reddit = (() => {
-  const snooWrap = new snoowrap(auth["reddit"]);
   const indicesBySubreddit = {};
   const postsBySubreddit = {};
 

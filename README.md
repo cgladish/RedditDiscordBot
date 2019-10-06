@@ -10,21 +10,15 @@ OwOBot requires [Node.js](https://nodejs.org/) to run.
 - Embed Links
 - View Channels
 
-3. Create an auth.json file with the following content:
+3. Setup your .env file:
 
-```json
-{
-  "discord": {
-    "token": YOUR_DISCORD_BOT_TOKEN
-  },
-  "reddit": {
-    "userAgent": "owo-bot",
-    "clientId": YOUR_REDDIT_APP_CLIENT_ID,
-    "clientSecret": YOUR_REDDIT_APP_CLIENT_SECRET,
-    "username": YOUR_REDDIT_USERNAME,
-    "password": YOUR_REDDIT_PASSWORD
-  }
-}
+```
+COMMAND=command you want the bot to respond to
+DISCORD_TOKEN=your discord bot token
+REDDIT_CLIENT_ID=your reddit app client id
+REDDIT_CLIENT_SECRET=your reddit app client secret
+REDDIT_USERNAME=your reddit username
+REDDIT_PASSWORD=your reddit password
 ```
 
 4. Install the dependencies and devDependencies and start the server.

@@ -2,10 +2,9 @@ import Discord from "discord.js";
 import logger from "winston";
 
 import * as commands from "./commands";
-import auth from "../auth.json";
 
 const bot = new Discord.Client();
-bot.login(auth["discord"]["token"]);
+bot.login(process.env.DISCORD_TOKEN);
 
 bot.once("ready", evt => {
   logger.info("Bot logged in!");
@@ -13,7 +12,10 @@ bot.once("ready", evt => {
 
 bot.on("message", message => {
   const splitMessage = message.content.split(" ");
-  if (!splitMessage.length || splitMessage[0].toLowerCase() !== "owo") {
+  if (
+    !splitMessage.length ||
+    splitMessage[0].toLowerCase() !== process.env.COMMAND
+  ) {
     return;
   }
 
