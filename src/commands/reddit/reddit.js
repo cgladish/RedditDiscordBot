@@ -36,10 +36,13 @@ export const reddit = (() => {
           }
         }
 
-        const embed = createEmbed(posts[index]);
-        if (embed) {
-          await channel.send(embed);
-          return;
+        const post = posts[index];
+        if (post) {
+          const embed = createEmbed(post);
+          if (embed) {
+            await channel.send(embed);
+            return;
+          }
         }
       }
 

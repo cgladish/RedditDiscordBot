@@ -16,21 +16,10 @@ export const PAGE_SIZE = 25;
 
 export const getImageUrlFromPost = post => {
   let url = null;
-
-  if (!post.is_self) {
-    if (post.media && post.media.oembed && post.media.oembed.thumbnail_url) {
-      url = post.media.oembed.thumbnail_url;
-    } else if (
-      post.preview &&
-      post.preview.images &&
-      post.preview.images.length &&
-      post.preview.images[0].source &&
-      post.preview.images[0].source.url
-    ) {
-      url = post.preview.images[0].source.url;
-    } else if (post.url) {
-      url = post.url;
-    }
+  if (post.media && post.media.oembed && post.media.oembed.thumbnail_url) {
+    url = post.media.oembed.thumbnail_url;
+  } else if (post.url) {
+    url = post.url;
   }
 
   if (
