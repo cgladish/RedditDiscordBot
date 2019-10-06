@@ -1,16 +1,12 @@
-import Discord from "discord.js";
 import snoowrap from "snoowrap";
 import logger from "winston";
 
-import auth from "auth.json";
-import bot from "src/bot";
-import { getImageUrlFromPost } from "./reddit.helpers";
-
-const COUNT = 25;
-
-const snooWrap = new snoowrap(auth["reddit"]);
+import auth from "../../../auth.json";
+import bot from "../../bot";
+import { PAGE_SIZE, createEmbed } from "./reddit.helpers";
 
 export const reddit = (() => {
+  const snooWrap = new snoowrap(auth["reddit"]);
   const indicesBySubreddit = {};
   const postsBySubreddit = {};
 
@@ -22,32 +18,26 @@ export const reddit = (() => {
 
       const subreddit = args[0];
       while (true) {
-        if (!indicesBySubreddit[subreddit]) {
-          indicesBySubreddit[subreddit] = 0;
-        }
-        const index = indicesBySubreddit[subreddit];
-        ++indicesBySubreddit[subreddit];
+        const index = indicesBySubreddit[subreddit] || 0;
+        indicesBySubreddit[subreddit] = (index + 1) % PAGE_SIZE;
 
-        const indexWithinPage = index % COUNT;
-        if (indexWithinPage === 0) {
-          postsBySubreddit[subreddit] = await snooWrap
-            .getSubreddit(subreddit)
-            .getTop({ time: "all", count: COUNT, after: index });
-          if (!postsBySubreddit[subreddit].length) {
+        let posts = postsBySubreddit[subreddit];
+        if (!index) {
+          if (posts) {
+            posts = await posts.fetchMore(PAGE_SIZE, false);
+          } else {
+            posts = await snooWrap
+              .getSubreddit(subreddit)
+              .getTop({ time: "all", count: PAGE_SIZE });
+          }
+          postsBySubreddit[subreddit] = posts;
+          if (!posts.length) {
             throw new Error("No posts left in the subreddit");
           }
         }
 
-        const post = postsBySubreddit[subreddit][indexWithinPage];
-        const imageUrl = getImageUrlFromPost(post);
-        if (imageUrl) {
-          const embed = new Discord.RichEmbed()
-            .setColor("#0099ff")
-            .setTitle(`Top post from ${post.subreddit.display_name}`)
-            .setURL(`http://reddit.com${post.permalink}`)
-            .setImage(getImageUrlFromPost(post))
-            .setTimestamp();
-
+        const embed = createEmbed(posts[index]);
+        if (embed) {
           await channel.send(embed);
           break;
         }
