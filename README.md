@@ -25,5 +25,5 @@ REDDIT_PASSWORD=your reddit password
 
 ```sh
 $ npm install
-$ npm start
+$ npm run start:dev
 ```

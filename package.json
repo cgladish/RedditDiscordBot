@@ -5,14 +5,14 @@
   "main": "main.js",
   "author": "Chase Gladish",
   "watch": {
-    "start-nowatch": "src/**/*.js"
+    "start": "src/**/*.js"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "clean": "rmdir /S /Q lib",
     "build": "babel -d lib/ src",
-    "start-nowatch": "npm run-script build && node main.js",
-    "start": "npm-watch start-nowatch"
+    "start": "npm run-script build && node main.js",
+    "start:dev": "npm-watch start"
   },
   "dependencies": {
     "discord.js": "^11.5.1",
