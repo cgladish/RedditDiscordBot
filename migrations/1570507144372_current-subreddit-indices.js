@@ -7,6 +7,11 @@ exports.up = pgm => {
     id: {
       type: "varchar(255)",
       primaryKey: true
+    },
+    viewed_index: {
+      type: "int",
+      notNull: true,
+      default: 0
     }
   });
   pgm.createTable("submissions", {
@@ -14,18 +19,18 @@ exports.up = pgm => {
       type: "varchar(255)",
       primaryKey: true
     },
-    subredditId: {
+    subreddit_id: {
       type: "varchar(255)",
       notNull: true,
       references: '"subreddits"',
       onDelete: "cascade"
     }
   });
-  pgm.createIndex("submissions", "subredditId");
+  pgm.createIndex("submissions", "subreddit_id");
 };
 
 exports.down = pgm => {
-  pgm.dropIndex("posts", "subredditId");
+  pgm.dropIndex("submissions", "subreddit_id");
   pgm.dropTable("submissions");
   pgm.dropTable("subreddits");
 };

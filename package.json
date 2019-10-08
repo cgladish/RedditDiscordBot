@@ -5,7 +5,7 @@
   "main": "main.js",
   "author": "Chase Gladish",
   "watch": {
-    "start": "src/**/*.js"
+    "start:build": "src/**/*.js"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",

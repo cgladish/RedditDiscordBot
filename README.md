@@ -1,5 +1,7 @@
 ### Installation
 
+// TODO: Document database setup
+
 OwOBot requires [Node.js](https://nodejs.org/) to run.
 
 1. Create a [Reddit application](https://www.reddit.com/prefs/apps/).
