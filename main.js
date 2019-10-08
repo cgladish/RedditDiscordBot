@@ -9,7 +9,7 @@ logger.add(new logger.transports.Console(), { colorize: true });
 logger.level = "debug";
 
 // This is so the app can run on heroku
-if (process.env.NODE_ENV === "prod") {
+if (process.env.NODE_ENV === "production") {
   const http = require("http");
   http
     .createServer((req, res) => {
@@ -17,9 +17,4 @@ if (process.env.NODE_ENV === "prod") {
       res.end();
     })
     .listen(process.env.PORT);
-  // Ping self to keep dyno awake
-  const THIRTY_MINUTES = 1800000;
-  setInterval(function() {
-    http.get(`http://${process.env.HEROKU_APP_NAME}.herokuapp.com/`);
-  }, THIRTY_MINUTES);
 }
