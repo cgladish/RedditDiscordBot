@@ -10,14 +10,17 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "clean": "rmdir /S /Q lib",
-    "build": "babel -d lib/ src",
+    "migrate": "node-pg-migrate",
+    "build": "npm run migrate up && babel -d lib/ src",
     "start": "node main.js",
-    "start:dev": "npm run-script build && npm-watch start"
+    "start:build": "npm run build && npm start",
+    "start:dev": "npm-watch start:build"
   },
   "dependencies": {
     "@babel/polyfill": "^7.6.0",
     "discord.js": "^11.5.1",
     "dotenv": "^8.1.0",
+    "pg": "^7.12.1",
     "snoowrap": "^1.19.0",
     "winston": "^3.2.1"
   },
@@ -26,6 +29,7 @@
     "@babel/core": "^7.6.2",
     "@babel/plugin-proposal-object-rest-spread": "^7.6.2",
     "@babel/preset-env": "^7.6.2",
+    "node-pg-migrate": "^3.23.2",
     "npm-watch": "^0.6.0"
   }
 }

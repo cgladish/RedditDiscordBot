@@ -1,6 +1,7 @@
 require("dotenv").config();
 require("@babel/polyfill");
 require("./lib/bot");
+require("./lib/pgClient");
 
 const logger = require("winston");
 logger.remove(logger.transports.Console);
