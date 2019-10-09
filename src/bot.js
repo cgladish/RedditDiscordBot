@@ -26,11 +26,11 @@ bot.on("message", message => {
   switch (command) {
     case "r":
     case "reddit":
-      commands.reddit(message.channel, args);
+      commands.reddit(message, args);
       break;
     case "rem":
     case "remove":
-      commands.remove(message.channel, args);
+      commands.remove(message, args);
       break;
     case "help":
     case null:
@@ -42,7 +42,7 @@ bot.on("message", message => {
         )
         .addField(
           "(rem | remove) [# of posts ago] [# of posts to remove]",
-          "Remove [# of posts to remove] starting from the post [# of posts ago]."
+          "Remove [# of posts to remove] starting from the post [# of posts ago] (starting at 1 for latest message)."
         );
       message.channel.send(embed);
       break;

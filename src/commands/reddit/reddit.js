@@ -19,7 +19,8 @@ const snooWrap = new snoowrap({
   password: process.env.REDDIT_PASSWORD
 });
 
-export const reddit = async (channel, args) => {
+export const reddit = async (message, args) => {
+  const { channel } = message;
   try {
     if (!args.length) {
       return channel.send("You need to provide a subreddit to fetch from!");
@@ -57,9 +58,11 @@ export const reddit = async (channel, args) => {
       }
     }
 
-    channel.send("I searched a page of posts and didn't find any images :/");
+    await channel.send(
+      "I searched a page of posts and didn't find any images :/"
+    );
   } catch (err) {
     logger.error(err.toString());
-    channel.send("Failed to retrieve post from the subreddit.");
+    await channel.send("Failed to retrieve post from the subreddit.");
   }
 };

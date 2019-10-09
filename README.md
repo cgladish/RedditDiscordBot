@@ -7,6 +7,7 @@ OwOBot requires [Node.js](https://nodejs.org/) to run.
 2. Create a [Discord application and bot](https://discordapp.com/developers/applications) with the following permissions:
 
 - Send Messages
+- Manage Messages
 - Embed Links
 - View Channels
 
