@@ -1,9 +1,15 @@
 import snoowrap from "snoowrap";
 import logger from "winston";
 
-import pgClient from "../../pgClient";
 import bot from "../../bot";
 import { PAGE_SIZE, createEmbed } from "./reddit.helpers";
+import {
+  getSubreddit,
+  getSubmission,
+  addSubreddit,
+  addSubmission,
+  setSubredditViewedIndex
+} from "./reddit.queries";
 
 const snooWrap = new snoowrap({
   userAgent: "owo-bot",
@@ -22,13 +28,9 @@ export const reddit = (() => {
       }
 
       const subreddit = args[0].toLowerCase();
-      const subredditInDb = (await pgClient.query(
-        `SELECT * FROM subreddits WHERE id='${subreddit}'`
-      )).rows[0];
+      const subredditInDb = await getSubreddit(subreddit);
       if (!subredditInDb) {
-        await pgClient.query(
-          `INSERT INTO subreddits (id) VALUES ('${subreddit}')`
-        );
+        await addSubreddit(subreddit);
       }
       const viewedIndex = subredditInDb ? subredditInDb.viewed_index : 0;
 
@@ -42,21 +44,11 @@ export const reddit = (() => {
       for (let i = 0; i < PAGE_SIZE; ++i) {
         const post = posts[i];
         if (post) {
-          const postInDb = (await pgClient.query(
-            `SELECT * FROM submissions WHERE ID='${
-              post.id
-            }' AND subreddit_id='${subreddit}'`
-          )).rows[0];
+          const postInDb = await getSubmission(post.id, subreddit);
           if (!postInDb) {
             await Promise.all([
-              pgClient.query(
-                `UPDATE subreddits SET viewed_index=${viewedIndex +
-                  i +
-                  1} WHERE id='${subreddit}'`
-              ),
-              pgClient.query(
-                `INSERT INTO submissions VALUES ('${post.id}', '${subreddit}')`
-              )
+              setSubredditViewedIndex(subreddit, viewedIndex + i + 1),
+              addSubmission(post.id, subreddit)
             ]);
             const embed = createEmbed(post);
             if (embed) {
