@@ -15,7 +15,7 @@ OwOBot requires [Node.js](https://nodejs.org/) to run.
 4. Setup your .env file:
 
 ```
-NODE_ENV=dev
+NODE_ENV=development
 COMMAND=command you want the bot to respond to
 DISCORD_TOKEN=your discord bot token
 REDDIT_CLIENT_ID=your reddit app client id

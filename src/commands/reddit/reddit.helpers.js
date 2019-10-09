@@ -1,4 +1,5 @@
 import Discord from "discord.js";
+import { createEmbed } from "../../util/createEmbed";
 
 const VALID_IMAGE_EXTENSIONS = [
   "jpg",
@@ -32,12 +33,11 @@ export const getImageUrlFromPost = post => {
   }
 };
 
-export const createEmbed = post => {
+export const createImageEmbed = post => {
   const imageUrl = getImageUrlFromPost(post);
   return (
     imageUrl &&
-    new Discord.RichEmbed()
-      .setColor("#FFB6C1")
+    createEmbed()
       .setAuthor(
         `/u/${post.author.name}`,
         "https://images-eu.ssl-images-amazon.com/images/I/418PuxYS63L.png"
@@ -45,7 +45,5 @@ export const createEmbed = post => {
       .setTitle(`Here's a top post from ${post.subreddit.display_name}`)
       .setURL(`http://reddit.com${post.permalink}`)
       .setImage(getImageUrlFromPost(post))
-      .setFooter("https://github.com/cgladish/OwOBot")
-      .setTimestamp()
   );
 };
