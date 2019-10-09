@@ -1,7 +1,5 @@
 ### Installation
 
-// TODO: Document database setup
-
 OwOBot requires [Node.js](https://nodejs.org/) to run.
 
 1. Create a [Reddit application](https://www.reddit.com/prefs/apps/).
@@ -12,7 +10,9 @@ OwOBot requires [Node.js](https://nodejs.org/) to run.
 - Embed Links
 - View Channels
 
-3. Setup your .env file:
+3. Download PostgreSQL and setup a database: https://www.postgresql.org/download/
+
+4. Setup your .env file:
 
 ```
 NODE_ENV=dev
@@ -22,9 +22,10 @@ REDDIT_CLIENT_ID=your reddit app client id
 REDDIT_CLIENT_SECRET=your reddit app client secret
 REDDIT_USERNAME=your reddit username
 REDDIT_PASSWORD=your reddit password
+DATABASE_URL=postgres://YourUserName:YourPassword@YourHost:5432/YourDatabase
 ```
 
-4. Install the dependencies and devDependencies and start the server.
+5. Install the dependencies and devDependencies and start the server.
 
 ```sh
 $ npm install
