@@ -3,8 +3,14 @@ import logger from "winston";
 const FETCH_MESSAGES_LIMIT = 100;
 
 export const remove = async (message, args) => {
-  const { channel } = message;
+  const { channel, member } = message;
   try {
+    if (!member || !member.hasPermission("MANAGE_MESSAGES")) {
+      return channel.send(
+        "You do not have permissions to delete messages on this channel."
+      );
+    }
+
     const numPostsAgoString = args[0];
     const numPostsToRemoveString = args[1];
     if (!numPostsAgoString || !numPostsToRemoveString) {
