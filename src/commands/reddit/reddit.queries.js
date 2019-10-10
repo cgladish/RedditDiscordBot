@@ -24,8 +24,11 @@ export const addSubmission = async (submissionId, subreddit) => {
   );
 };
 
-export const setSubredditViewedIndex = async (subreddit, viewedIndex) => {
+export const setSubredditLastViewedSubmission = async (
+  subreddit,
+  lastViewedSubmission
+) => {
   await pgClient.query(
-    `UPDATE subreddits SET viewed_index=${viewedIndex} WHERE id='${subreddit}'`
+    `UPDATE subreddits SET last_viewed_submission='${lastViewedSubmission}' WHERE id='${subreddit}'`
   );
 };

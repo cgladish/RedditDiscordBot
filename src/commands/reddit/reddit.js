@@ -3,13 +3,7 @@ import logger from "winston";
 
 import bot from "../../bot";
 import { PAGE_SIZE, createImageEmbed } from "./reddit.helpers";
-import {
-  getSubreddit,
-  getSubmission,
-  addSubreddit,
-  addSubmission,
-  setSubredditViewedIndex
-} from "./reddit.queries";
+import * as queries from "./reddit.queries";
 
 const snooWrap = new snoowrap({
   userAgent: "owo-bot",
@@ -27,40 +21,47 @@ export const reddit = async (message, args) => {
     }
 
     const subreddit = args[0].toLowerCase();
-    const subredditInDb = await getSubreddit(subreddit);
+    const subredditInDb = await queries.getSubreddit(subreddit);
     if (!subredditInDb) {
-      await addSubreddit(subreddit);
+      await queries.addSubreddit(subreddit);
     }
-    const viewedIndex = subredditInDb ? subredditInDb.viewed_index : 0;
 
-    const posts = await snooWrap
-      .getSubreddit(subreddit)
-      .getTop({ time: "all", count: PAGE_SIZE, after: viewedIndex });
+    const getTopArgs = {
+      time: "all",
+      count: PAGE_SIZE
+    };
+    if (subredditInDb && subredditInDb.last_viewed_submission) {
+      getTopArgs.after = `t3_${subredditInDb.last_viewed_submission}`;
+    }
+    const posts = await snooWrap.getSubreddit(subreddit).getTop(getTopArgs);
     if (!posts.length) {
       throw new Error("No posts left in the subreddit");
     }
 
-    for (let i = 0; i < PAGE_SIZE; ++i) {
-      const post = posts[i];
-      if (post) {
-        const postInDb = await getSubmission(post.id, subreddit);
-        if (!postInDb) {
-          await Promise.all([
-            setSubredditViewedIndex(subreddit, viewedIndex + i + 1),
-            addSubmission(post.id, subreddit)
-          ]);
-          const embed = createImageEmbed(post);
-          if (embed) {
-            await channel.send(embed);
-            return;
-          }
+    const promises = [];
+    let post;
+    let foundPost = false;
+    for (post of posts) {
+      const postInDb = await queries.getSubmission(post.id, subreddit);
+      if (!postInDb) {
+        promises.push(queries.addSubmission(post.id, subreddit));
+        const embed = createImageEmbed(post);
+        if (embed) {
+          promises.push(channel.send(embed));
+          foundPost = true;
+          break;
         }
       }
     }
 
-    await channel.send(
-      "I searched a page of posts and didn't find any images :/"
-    );
+    promises.push(queries.setSubredditLastViewedSubmission(subreddit, post.id));
+    if (!foundPost) {
+      promises.push(
+        channel.send("I searched a page of posts and didn't find any images :/")
+      );
+    }
+
+    await Promise.all(promises);
   } catch (err) {
     logger.error(err.toString());
     await channel.send("Failed to retrieve post from the subreddit.");

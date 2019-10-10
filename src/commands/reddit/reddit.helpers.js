@@ -1,36 +1,29 @@
 import Discord from "discord.js";
 import { createEmbed } from "../../util/createEmbed";
 
-const VALID_IMAGE_EXTENSIONS = [
-  "jpg",
-  "jpeg",
-  "png",
-  "gif",
-  "mp4",
-  "mpeg",
-  "avi",
-  "webm",
-  "tiff",
-  "tif"
-];
+const VALID_IMAGE_EXTENSIONS = ["jpg", "jpeg", "png", "gif", "gifv", "webm"];
 export const PAGE_SIZE = 25;
 
+const hasImageExtension = url => {
+  return VALID_IMAGE_EXTENSIONS.some(ext =>
+    url.toLowerCase().endsWith(`.${ext}`)
+  );
+};
+
 export const getImageUrlFromPost = post => {
-  let url = null;
-  if (post.media && post.media.oembed && post.media.oembed.thumbnail_url) {
-    url = post.media.oembed.thumbnail_url;
-  } else if (post.url) {
-    url = post.url;
+  if (hasImageExtension(post.url)) {
+    return post.url;
+  }
+  if (
+    post.url.includes("gfycat.com") &&
+    post.media &&
+    post.media.oembed &&
+    post.media.oembed.thumbnail_url
+  ) {
+    return post.media.oembed.thumbnail_url;
   }
 
-  if (
-    url &&
-    VALID_IMAGE_EXTENSIONS.some(ext => url.toLowerCase().endsWith(`.${ext}`))
-  ) {
-    return url;
-  } else {
-    return null;
-  }
+  return null;
 };
 
 export const createImageEmbed = post => {
