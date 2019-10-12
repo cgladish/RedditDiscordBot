@@ -3,7 +3,7 @@ import logger from "winston";
 
 import bot from "../../bot";
 import { PAGE_SIZE, createImageEmbed } from "./reddit.helpers";
-import * as queries from "./reddit.queries";
+import * as queries from "./queries";
 
 const snooWrap = new snoowrap({
   userAgent: "owo-bot",

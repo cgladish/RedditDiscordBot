@@ -1,15 +1,19 @@
-import axios from "axios";
 import logger from "winston";
 import ytdl from "ytdl-core";
 
-import { getSearchResults } from "./play.requests";
+import { getSearchResults } from "./resources";
 
 export const play = async (message, args) => {
   const { channel, member } = message;
   const { voiceChannel } = member;
   try {
     if (!args.length) {
-      return channel.send("You need to provide search strings!");
+      return channel.send("You need to provide a list of keywords!");
+    }
+    if (!voiceChannel) {
+      return channel.send(
+        "You must be in a voice channel to use this command."
+      );
     }
 
     const searchResults = await getSearchResults(args);

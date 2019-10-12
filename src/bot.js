@@ -30,8 +30,9 @@ bot.on("message", message => {
     case "rem":
     case "remove":
       return commands.remove(message, args);
-    case "play":
-      return commands.play(message, args);
+    case "mu":
+    case "music":
+      return commands.music(message, args);
     case "help":
     case null:
       const embed = createEmbed()
