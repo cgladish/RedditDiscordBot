@@ -64,6 +64,6 @@ export const reddit = async (message, args) => {
     await Promise.all(promises);
   } catch (err) {
     logger.error(err.toString());
-    await channel.send("Failed to retrieve post from the subreddit.");
+    await channel.send("❌Failed to retrieve post from the subreddit.");
   }
 };

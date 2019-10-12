@@ -49,6 +49,12 @@ class Queue {
     this.connectionDispatcher = this.connection.playStream(stream);
     this.connectionDispatcher.on("end", () => this.next());
   }
+
+  clear() {
+    if (this.videoQueue.length) {
+      this.videoQueue = [this.videoQueue[0]];
+    }
+  }
 }
 
 export const queue = new Queue();

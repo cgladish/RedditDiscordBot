@@ -46,9 +46,18 @@ bot.on("message", message => {
           "Remove [# of posts to remove] starting from the post [# of posts ago] (starting at 1 for latest message)."
         )
         .addField(
-          "(mu | music) play [url | ...search keywords]",
+          "(mu | music) play ([url] | [list of keywords])",
           "Play a youtube video by providing either a url or a list of keywords."
-        );
+        )
+        .addField(
+          "(mu | music) skip",
+          "Skip the currently playing youtube video."
+        )
+        .addField(
+          "(mu | music) np",
+          "View the currently playing youtube video."
+        )
+        .addField("(mu | music) list", "View the list of queued up videos.");
       return message.channel.send(embed);
     default:
       message.channel.send("I don't understand this command :(");

@@ -42,6 +42,6 @@ export const play = async (message, args) => {
     await channel.send(embed);
   } catch (err) {
     logger.error(err.toString());
-    await channel.send("Failed to play audio.");
+    await channel.send("❌Failed to play video.");
   }
 };

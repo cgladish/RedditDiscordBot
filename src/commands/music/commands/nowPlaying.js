@@ -9,21 +9,17 @@ import {
   createNothingIsPlayingEmbed
 } from "../helpers";
 
-export const skip = async (message, args) => {
+export const nowPlaying = async (message, args) => {
   const { channel, member } = message;
   const { voiceChannel } = member;
   try {
-    if (!queue.getCurrentVideo()) {
-      return channel.send(createNothingIsPlayingEmbed());
-    }
-
-    queue.skip();
     const video = queue.getCurrentVideo();
-    if (video) {
-      await channel.send(createNowPlayingEmbed(video));
-    }
+    const embed = video
+      ? createNowPlayingEmbed(video)
+      : createNothingIsPlayingEmbed();
+    await channel.send(embed);
   } catch (err) {
     logger.error(err.toString());
-    await channel.send("❌Failed to skip video.");
+    await channel.send("Failed to retrieve currently playing video.");
   }
 };

@@ -16,11 +16,17 @@ export const music = (message, args) => {
         return commands.play(message, remainingArgs);
       case "skip":
         return commands.skip(message, remainingArgs);
+      case "np":
+        return commands.nowPlaying(message, remainingArgs);
+      case "list":
+        return commands.list(message, remainingArgs);
+      case "clear":
+        return commands.clear(message, remainingArgs);
       default:
         return channel.send("Invalid subcommand provided.");
     }
   } catch (err) {
     logger.error(err.toString());
-    return channel.send("Failed to perform command.");
+    return channel.send("❌Failed to perform command.");
   }
 };

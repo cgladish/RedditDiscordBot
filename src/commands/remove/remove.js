@@ -42,6 +42,6 @@ export const remove = async (message, args) => {
     await channel.send("Successfully deleted message(s)!");
   } catch (err) {
     logger.error(err.toString());
-    await channel.send("Failed to remove message(s)");
+    await channel.send("❌Failed to remove message(s).");
   }
 };
