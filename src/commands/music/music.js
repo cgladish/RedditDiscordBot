@@ -1,6 +1,6 @@
 import logger from "winston";
 
-import { play } from "./play";
+import * as commands from "./commands";
 
 export const music = (message, args) => {
   const { channel, member } = message;
@@ -13,7 +13,9 @@ export const music = (message, args) => {
     const remainingArgs = args.slice(1, args.length);
     switch (subcommand) {
       case "play":
-        return play(message, remainingArgs);
+        return commands.play(message, remainingArgs);
+      case "skip":
+        return commands.skip(message, remainingArgs);
       default:
         return channel.send("Invalid subcommand provided.");
     }

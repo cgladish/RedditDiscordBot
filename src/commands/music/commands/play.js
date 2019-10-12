@@ -1,9 +1,13 @@
 import logger from "winston";
-import ytdl from "ytdl-core";
 import qs from "query-string";
 
-import * as resources from "./resources";
-import { createEmbed } from "../../util/createEmbed";
+import * as resources from "../resources";
+import { queue } from "../queue";
+import {
+  getUrlFromVideo,
+  createNowPlayingEmbed,
+  createQueuedEmbed
+} from "../helpers";
 
 export const play = async (message, args) => {
   const { channel, member } = message;
@@ -30,22 +34,14 @@ export const play = async (message, args) => {
       return channel.send("No results found.");
     }
 
-    const url = `https://www.youtube.com/watch?v=${video.id.videoId ||
-      video.id}`;
-    const stream = ytdl(url, { filter: "audioonly" });
+    const embed = queue.getCurrentVideo()
+      ? createQueuedEmbed(video)
+      : createNowPlayingEmbed(video);
 
-    const connection = await voiceChannel.join();
-    const connectionDispatcher = connection.playStream(stream);
-    connectionDispatcher.on("end", () => voiceChannel.leave());
-
-    const embed = createEmbed()
-      .setTitle(`▶️ Now Playing: ${video.snippet.title}`)
-      .setURL(url);
+    await queue.add(voiceChannel, video);
     await channel.send(embed);
   } catch (err) {
     logger.error(err.toString());
-    await channel.send(
-      "Failed to play audio from the provided search strings."
-    );
+    await channel.send("Failed to play audio.");
   }
 };
