@@ -9,6 +9,16 @@ const buildRequestUrl = (path, queryParams) => {
   return `https://www.googleapis.com/youtube/v3/${path}?${params}`;
 };
 
+export const getVideo = async videoId => {
+  const response = await axios.get(
+    buildRequestUrl("videos", {
+      part: "snippet",
+      id: videoId
+    })
+  );
+  return response.data.items[0] || null;
+};
+
 export const getSearchResults = async searchArgs => {
   const response = await axios.get(
     buildRequestUrl("search", {

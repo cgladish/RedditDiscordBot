@@ -44,6 +44,10 @@ bot.on("message", message => {
         .addField(
           "(rem | remove) [# of posts ago] [# of posts to remove]",
           "Remove [# of posts to remove] starting from the post [# of posts ago] (starting at 1 for latest message)."
+        )
+        .addField(
+          "(mu | music) play [url | ...search keywords]",
+          "Play a youtube video by providing either a url or a list of keywords."
         );
       return message.channel.send(embed);
     default:
