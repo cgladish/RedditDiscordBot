@@ -26,12 +26,12 @@ bot.on("message", message => {
   switch (command) {
     case "r":
     case "reddit":
-      commands.reddit(message, args);
-      break;
+      return commands.reddit(message, args);
     case "rem":
     case "remove":
-      commands.remove(message, args);
-      break;
+      return commands.remove(message, args);
+    case "play":
+      return commands.play(message, args);
     case "help":
     case null:
       const embed = createEmbed()
@@ -44,8 +44,7 @@ bot.on("message", message => {
           "(rem | remove) [# of posts ago] [# of posts to remove]",
           "Remove [# of posts to remove] starting from the post [# of posts ago] (starting at 1 for latest message)."
         );
-      message.channel.send(embed);
-      break;
+      return message.channel.send(embed);
     default:
       message.channel.send("I don't understand this command :(");
   }

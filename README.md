@@ -13,7 +13,11 @@ OwOBot requires [Node.js](https://nodejs.org/) to run.
 
 3. Download PostgreSQL and setup a database: https://www.postgresql.org/download/
 
-4. Setup your .env file:
+4. Setup a Google APIs project and get an api key: https://console.developers.google.com/projectselector2/apis/dashboard
+
+5. Download and install FFMPEG: https://ffmpeg.zeranoe.com/builds/
+
+6. Setup your .env file:
 
 ```
 NODE_ENV=development
@@ -24,9 +28,10 @@ REDDIT_CLIENT_SECRET=your reddit app client secret
 REDDIT_USERNAME=your reddit username
 REDDIT_PASSWORD=your reddit password
 DATABASE_URL=postgres://YourUserName:YourPassword@YourHost:5432/YourDatabase
+YOUTUBE_API_KEY=your youtube api key
 ```
 
-5. Install the dependencies and devDependencies and start the server.
+7. Install the dependencies and devDependencies and start the server.
 
 ```sh
 $ npm install
