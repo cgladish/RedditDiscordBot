@@ -57,7 +57,8 @@ bot.on("message", message => {
           "(mu | music) np",
           "View the currently playing youtube video."
         )
-        .addField("(mu | music) list", "View the list of queued up videos.");
+        .addField("(mu | music) list", "View the list of queued up videos.")
+        .addField("(mu | music) clear", "Clear the current video queue.");
       return message.channel.send(embed);
     default:
       message.channel.send("I don't understand this command :(");
