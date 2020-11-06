@@ -46,6 +46,14 @@ export const createImageEmbed = (post) => {
 export const createTextEmbed = (post) => {
   return (
     post.selftext &&
-    createGenericEmbed(post).setDescription(post.selftext.slice(0, 2048))
+    createGenericEmbed(post)
+      .setDescription(post.selftext.slice(0, 2048))
+      .setColor("#4CBB17")
   );
+};
+
+export const createEmptyEmbed = (post) => {
+  return createGenericEmbed(post)
+    .setDescription("Post is title only!")
+    .setColor("#FBD428");
 };

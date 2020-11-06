@@ -2,7 +2,12 @@ import snoowrap from "snoowrap";
 import logger from "winston";
 
 import bot from "../../bot";
-import { PAGE_SIZE, createImageEmbed, createTextEmbed } from "./reddit.helpers";
+import {
+  PAGE_SIZE,
+  createImageEmbed,
+  createTextEmbed,
+  createEmptyEmbed,
+} from "./reddit.helpers";
 import * as queries from "./queries";
 
 const snooWrap = new snoowrap({
@@ -45,20 +50,19 @@ export const reddit = async (message, args) => {
       const postInDb = await queries.getSubmission(post.id, subreddit);
       if (!postInDb) {
         promises.push(queries.addSubmission(post.id, subreddit));
-        const embed = createImageEmbed(post) || createTextEmbed(post);
-        if (embed) {
-          promises.push(channel.send(embed));
-          foundPost = true;
-          break;
-        }
+        const embed =
+          createImageEmbed(post) ||
+          createTextEmbed(post) ||
+          createEmptyEmbed(post);
+        promises.push(channel.send(embed));
+        foundPost = true;
+        break;
       }
     }
 
     promises.push(queries.setSubredditLastViewedSubmission(subreddit, post.id));
     if (!foundPost) {
-      promises.push(
-        channel.send("I searched a page of posts and didn't find any images :/")
-      );
+      promises.push(channel.send("Couldn't find any posts!!"));
     }
 
     await Promise.all(promises);
