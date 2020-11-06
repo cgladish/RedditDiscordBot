@@ -15,9 +15,7 @@ OwOBot requires [Node.js](https://nodejs.org/) to run.
 
 4. Setup a Google APIs project and get an api key: https://console.developers.google.com/projectselector2/apis/dashboard
 
-5. Download and install FFMPEG: https://ffmpeg.zeranoe.com/builds/
-
-6. Setup your .env file:
+5. Setup your .env file:
 
 ```
 NODE_ENV=development
