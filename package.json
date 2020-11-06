@@ -5,7 +5,7 @@
   "main": "main.js",
   "author": "Chase Gladish",
   "engines": {
-    "node": "12.18.0",
+    "node": "12.19.0",
     "npm": "6.14.8"
   },
   "watch": {
@@ -34,11 +34,11 @@
     "ytdl-core": "^1.0.0"
   },
   "devDependencies": {
-    "@babel/cli": "^7.6.2",
+    "@babel/cli": "^7.12.1",
     "@babel/core": "^7.6.2",
     "@babel/plugin-proposal-object-rest-spread": "^7.6.2",
     "@babel/preset-env": "^7.6.2",
     "node-pg-migrate": "^3.23.2",
-    "npm-watch": "^0.6.0"
+    "npm-watch": "^0.7.0"
   }
 }
