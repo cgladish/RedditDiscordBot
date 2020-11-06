@@ -41,6 +41,7 @@ export const play = async (message, args) => {
     await queue.add(voiceChannel, video);
     await channel.send(embed);
   } catch (err) {
+    console.log(err);
     logger.error(err.toString());
     await channel.send("❌Failed to play video.");
   }

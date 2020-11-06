@@ -2,7 +2,7 @@ import snoowrap from "snoowrap";
 import logger from "winston";
 
 import bot from "../../bot";
-import { PAGE_SIZE, createImageEmbed } from "./reddit.helpers";
+import { PAGE_SIZE, createImageEmbed, createTextEmbed } from "./reddit.helpers";
 import * as queries from "./queries";
 
 const snooWrap = new snoowrap({
@@ -10,7 +10,7 @@ const snooWrap = new snoowrap({
   clientId: process.env.REDDIT_CLIENT_ID,
   clientSecret: process.env.REDDIT_CLIENT_SECRET,
   username: process.env.REDDIT_USERNAME,
-  password: process.env.REDDIT_PASSWORD
+  password: process.env.REDDIT_PASSWORD,
 });
 
 export const reddit = async (message, args) => {
@@ -26,14 +26,14 @@ export const reddit = async (message, args) => {
       await queries.addSubreddit(subreddit);
     }
 
-    const getTopArgs = {
+    const getHotArgs = {
       time: "all",
-      count: PAGE_SIZE
+      count: PAGE_SIZE,
     };
     if (subredditInDb && subredditInDb.last_viewed_submission) {
-      getTopArgs.after = `t3_${subredditInDb.last_viewed_submission}`;
+      getHotArgs.after = `t3_${subredditInDb.last_viewed_submission}`;
     }
-    const posts = await snooWrap.getSubreddit(subreddit).getTop(getTopArgs);
+    const posts = await snooWrap.getSubreddit(subreddit).getHot(getHotArgs);
     if (!posts.length) {
       throw new Error("No posts left in the subreddit");
     }
@@ -45,7 +45,7 @@ export const reddit = async (message, args) => {
       const postInDb = await queries.getSubmission(post.id, subreddit);
       if (!postInDb) {
         promises.push(queries.addSubmission(post.id, subreddit));
-        const embed = createImageEmbed(post);
+        const embed = createImageEmbed(post) || createTextEmbed(post);
         if (embed) {
           promises.push(channel.send(embed));
           foundPost = true;
