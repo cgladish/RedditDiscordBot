@@ -1,7 +1,8 @@
 import Discord from "discord.js";
+import logger from "winston";
 import { createEmbed } from "../../util/createEmbed";
 
-const VALID_IMAGE_EXTENSIONS = ["jpg", "jpeg", "png", "gif", "gifv", "webm"];
+const VALID_IMAGE_EXTENSIONS = ["jpg", "jpeg", "png", "gif", "webm"];
 export const PAGE_SIZE = 25;
 
 const hasImageExtension = (url) => {
@@ -14,12 +15,7 @@ export const getImageUrlFromPost = (post) => {
   if (hasImageExtension(post.url)) {
     return post.url;
   }
-  if (
-    post.url.includes("gfycat.com") &&
-    post.media &&
-    post.media.oembed &&
-    post.media.oembed.thumbnail_url
-  ) {
+  if (post.media && post.media.oembed && post.media.oembed.thumbnail_url) {
     return post.media.oembed.thumbnail_url;
   }
 
@@ -32,7 +28,7 @@ const createGenericEmbed = (post) => {
       `/u/${post.author.name}`,
       "https://images-eu.ssl-images-amazon.com/images/I/418PuxYS63L.png"
     )
-    .setTitle(`Here's a hot post from ${post.subreddit.display_name}`)
+    .setTitle(post.title)
     .setURL(`http://reddit.com${post.permalink}`);
 };
 
@@ -44,16 +40,16 @@ export const createImageEmbed = (post) => {
 };
 
 export const createTextEmbed = (post) => {
+  const postText =
+    post.selftext.length > 2048
+      ? post.selftext.slice(0, 2045) + "..."
+      : post.selftext.slice(0, 2048);
   return (
     post.selftext &&
-    createGenericEmbed(post)
-      .setDescription(post.selftext.slice(0, 2048))
-      .setColor("#4CBB17")
+    createGenericEmbed(post).setDescription(postText).setColor("#4CBB17")
   );
 };
 
 export const createEmptyEmbed = (post) => {
-  return createGenericEmbed(post)
-    .setDescription("Post is title only!")
-    .setColor("#FBD428");
+  return createGenericEmbed(post).setColor("#FBD428");
 };
