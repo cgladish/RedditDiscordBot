@@ -48,7 +48,7 @@ export const reddit = async (message, args) => {
     let foundPost = false;
     for (post of posts) {
       const postInDb = await queries.getSubmission(post.id, subreddit);
-      if (!postInDb) {
+      if (!postInDb && !post.stickied) {
         promises.push(queries.addSubmission(post.id, subreddit));
         const embed =
           createImageEmbed(post) ||
