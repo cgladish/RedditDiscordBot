@@ -4,6 +4,9 @@
   "description": "My own Discord bot",
   "main": "main.js",
   "author": "Chase Gladish",
+  "engines": {
+    "node": "12.18.0"
+  },
   "watch": {
     "start:build": "src/*.js"
   },
