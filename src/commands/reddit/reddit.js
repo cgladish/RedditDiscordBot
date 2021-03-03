@@ -5,6 +5,7 @@ import {
   PAGE_SIZE,
   createEmbedFromPost,
   getPermalinkFromPost,
+  doLinksMatch,
 } from "./reddit.helpers";
 import * as queries from "./queries";
 
