@@ -1,12 +1,10 @@
 import snoowrap from "snoowrap";
 import logger from "winston";
 
-import bot from "../../bot";
 import {
   PAGE_SIZE,
-  createImageEmbed,
-  createTextEmbed,
-  createEmptyEmbed,
+  createEmbedFromPost,
+  getPermalinkFromPost,
 } from "./reddit.helpers";
 import * as queries from "./queries";
 
@@ -25,49 +23,66 @@ export const reddit = async (message, args) => {
       return channel.send("You need to provide a subreddit to fetch from!");
     }
 
-    const subreddit = args[0].toLowerCase();
-    const subredditInDb = await queries.getSubreddit(subreddit);
-    if (!subredditInDb) {
-      await queries.addSubreddit(subreddit);
-    }
-
-    const getHotArgs = {
-      time: "all",
-      count: PAGE_SIZE,
-    };
-    if (subredditInDb && subredditInDb.last_viewed_submission) {
-      getHotArgs.after = `t3_${subredditInDb.last_viewed_submission}`;
-    }
-    const posts = await snooWrap.getSubreddit(subreddit).getHot(getHotArgs);
-    if (!posts.length) {
-      throw new Error("No posts left in the subreddit");
-    }
-
-    const promises = [];
-    let post;
     let foundPost = false;
-    for (post of posts) {
-      const postInDb = await queries.getSubmission(post.id, subreddit);
-      if (!postInDb && !post.stickied) {
-        promises.push(queries.addSubmission(post.id, subreddit));
-        const embed =
-          createImageEmbed(post) ||
-          createTextEmbed(post) ||
-          createEmptyEmbed(post);
-        promises.push(channel.send(embed));
-        foundPost = true;
-        break;
+    // Try twice to fetch
+    for (let i = 0; i < 2; i++) {
+      const subreddit = args[0].toLowerCase();
+      const subredditInDb = await queries.getSubreddit(subreddit);
+      if (!subredditInDb) {
+        await queries.addSubreddit(subreddit);
       }
+
+      const getHotArgs = {
+        time: "all",
+        count: PAGE_SIZE,
+      };
+      if (subredditInDb && subredditInDb.last_viewed_submission) {
+        getHotArgs.after = `t3_${subredditInDb.last_viewed_submission}`;
+      }
+      const posts = await snooWrap.getSubreddit(subreddit).getHot(getHotArgs);
+      if (!posts.length) {
+        throw new Error("No posts left in the subreddit");
+      }
+
+      const promises = [];
+      let post;
+      for (post of posts) {
+        const postInDb = await queries.getSubmission(post.id, subreddit);
+        if (!postInDb && !post.stickied) {
+          promises.push(queries.addSubmission(post.id, subreddit));
+          const embed = createEmbedFromPost(post);
+          promises.push(
+            channel.send(embed).then(() => {
+              if (getPermalinkFromPost(post) !== post.url) {
+                channel.send(post.url);
+              }
+            })
+          );
+          foundPost = true;
+          break;
+        }
+      }
+
+      if (foundPost) {
+        promises.push(
+          queries.setSubredditLastViewedSubmission(subreddit, post.id)
+        );
+        break;
+      } else {
+        promises.push(queries.clearSubredditLastViewedSubmission());
+      }
+      await Promise.all(promises);
     }
 
-    promises.push(queries.setSubredditLastViewedSubmission(subreddit, post.id));
     if (!foundPost) {
-      promises.push(channel.send("Couldn't find any posts!!"));
+      throw new Error("Couldn't find any posts!");
     }
-
-    await Promise.all(promises);
   } catch (err) {
     logger.error(err.toString());
-    await channel.send("❌Failed to retrieve post from the subreddit.");
+    let errMessage = "❌Failed to retrieve post from the subreddit.";
+    if (err.message) {
+      errMessage += "\n" + ["```diff", err.message, "```"].join("\n");
+    }
+    await channel.send(errMessage);
   }
 };
