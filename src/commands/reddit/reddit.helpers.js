@@ -12,7 +12,7 @@ export const getPermalinkFromPost = (post) =>
   `https://reddit.com${post.permalink}`;
 
 export const doLinksMatch = (link1, link2) =>
-  link1.replace("http:", "https:") === link2.replace("http:", "https");
+  link1.replace("http:", "https:") === link2.replace("http:", "https:");
 
 export const createEmbedFromPost = (post) => {
   const embed = createEmbed()
