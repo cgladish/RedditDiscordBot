@@ -9,7 +9,10 @@ export const getSelfTextFromPost = (post) => {
 };
 
 export const getPermalinkFromPost = (post) =>
-  `http://reddit.com${post.permalink}`;
+  `https://reddit.com${post.permalink}`;
+
+export const doLinksMatch = (link1, link2) =>
+  link1.replace("http:", "https:") === link2.replace("http:", "https");
 
 export const createEmbedFromPost = (post) => {
   const embed = createEmbed()

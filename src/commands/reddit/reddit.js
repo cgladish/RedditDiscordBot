@@ -53,7 +53,7 @@ export const reddit = async (message, args) => {
           const embed = createEmbedFromPost(post);
           promises.push(
             channel.send(embed).then(() => {
-              if (getPermalinkFromPost(post) !== post.url) {
+              if (!doLinksMatch(getPermalinkFromPost(post), post.url)) {
                 channel.send(post.url);
               }
             })
