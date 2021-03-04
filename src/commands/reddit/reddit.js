@@ -67,7 +67,7 @@ export const reddit = async (message, args) => {
         );
         break;
       } else {
-        promises.push(queries.clearSubredditLastViewedSubmission());
+        promises.push(queries.clearSubredditLastViewedSubmission(subreddit));
       }
       await Promise.all(promises);
     }
