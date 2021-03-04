@@ -41,9 +41,6 @@ export const reddit = async (message, args) => {
         getHotArgs.after = `t3_${subredditInDb.last_viewed_submission}`;
       }
       const posts = await snooWrap.getSubreddit(subreddit).getHot(getHotArgs);
-      if (!posts.length) {
-        throw new Error("No posts left in the subreddit");
-      }
 
       const promises = [];
       let post;
